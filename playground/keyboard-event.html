@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Keyboard Event</title>
+	<style>
+		table,
+		th,
+		td {
+			border: 1px solid gray;
+			border-collapse: collapse;
+		}
+
+		th,
+		td {
+			padding: 2px 8px;
+		}
+
+		thead th,
+		thead td {
+			padding: 8px;
+		}
+
+		.container {
+			display: flex;
+		}
+
+		.table {
+			flex: 1;
+		}
+
+		table {
+			margin: auto;
+		}
+
+		table tr th:nth-child(3),
+		table tr td:nth-child(3) {
+			color: lightgray;
+		}
+
+	</style>
+</head>
+
+<body style="text-align: center;">
+	<h1>Keyboard Event</h1>
+	<p><input type="text" autofocus></p>
+	<br>
+	<div class="container">
+		<div class="table">
+			<h3>keydown</h3>
+			<table class="keydown">
+				<thead>
+					<tr>
+						<th>key</th>
+						<th>code</th>
+						<th>keyCode</th>
+						<th>Modifiers</th>
+						<th>Trusted?</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div class="table">
+			<h3>keyup</h3>
+			<table class="keyup">
+				<thead>
+					<tr>
+						<th>key</th>
+						<th>code</th>
+						<th>keyCode</th>
+						<th>Modifiers</th>
+						<th>Trusted?</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<script>
+		const keydownTable = document.querySelector('table.keydown tbody');
+		const keyupTable = document.querySelector('table.keyup tbody')
+		const input = document.querySelector('input');
+		const modifierKeys = [
+			'Alt',
+			'AltGraph',
+			'CapsLock',
+			'Control',
+			'Fn',
+			'FnLock',
+			'Hyper',
+			'Meta',
+			'NumLock',
+			'ScrollLock',
+			'Shift',
+			'Super',
+			'Symbol',
+			'SymbolLock',
+		];
+		function toNumber(bool) { return bool ? 1 : 0; }
+		function prependEventRow(table, evt) {
+			const tr = document.createElement('tr');
+			[
+				evt.key,
+				evt.code,
+				evt.keyCode,
+				modifierKeys.filter(m => evt.getModifierState(m)).join(', '),
+				evt.isTrusted
+			]
+				.forEach(item => {
+					const td = document.createElement('td');
+					td.append(item);
+					tr.append(td);
+				});
+			table.prepend(tr);
+		}
+		input.addEventListener('keydown', evt => prependEventRow(keydownTable, evt));
+		input.addEventListener('keyup', evt => prependEventRow(keyupTable, evt));
+	</script>
+</body>
+
+</html>
